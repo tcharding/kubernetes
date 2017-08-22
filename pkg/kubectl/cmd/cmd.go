@@ -20,18 +20,18 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/golang/glog"
+	"github.com/spf13/cobra"
 	"k8s.io/apiserver/pkg/util/flag"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/auth"
 	cmdconfig "k8s.io/kubernetes/pkg/kubectl/cmd/config"
+	cmdresource "k8s.io/kubernetes/pkg/kubectl/cmd/resource"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/rollout"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/set"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
-
-	"github.com/golang/glog"
-	"github.com/spf13/cobra"
 )
 
 const (
@@ -196,50 +196,50 @@ __custom_func() {
 }
 `
 
-	// If you add a resource to this list, please also take a look at pkg/kubectl/kubectl.go
-	// and add a short forms entry in expandResourceShortcut() when appropriate.
-	// TODO: This should be populated using the discovery information from apiserver.
-	validResources = `Valid resource types include:
+	// 	// If you add a resource to this list, please also take a look at pkg/kubectl/kubectl.go
+	// 	// and add a short forms entry in expandResourceShortcut() when appropriate.
+	// 	// TODO: This should be populated using the discovery information from apiserver.
+	// 	validResources = `Valid resource types include:
 
-    * all
-    * certificatesigningrequests (aka 'csr')
-    * clusterrolebindings
-    * clusterroles
-    * clusters (valid only for federation apiservers)
-    * componentstatuses (aka 'cs')
-    * configmaps (aka 'cm')
-    * controllerrevisions
-    * cronjobs
-    * customresourcedefinition (aka 'crd')
-    * daemonsets (aka 'ds')
-    * deployments (aka 'deploy')
-    * endpoints (aka 'ep')
-    * events (aka 'ev')
-    * horizontalpodautoscalers (aka 'hpa')
-    * ingresses (aka 'ing')
-    * jobs
-    * limitranges (aka 'limits')
-    * namespaces (aka 'ns')
-    * networkpolicies (aka 'netpol')
-    * nodes (aka 'no')
-    * persistentvolumeclaims (aka 'pvc')
-    * persistentvolumes (aka 'pv')
-    * poddisruptionbudgets (aka 'pdb')
-    * podpreset
-    * pods (aka 'po')
-    * podsecuritypolicies (aka 'psp')
-    * podtemplates
-    * replicasets (aka 'rs')
-    * replicationcontrollers (aka 'rc')
-    * resourcequotas (aka 'quota')
-    * rolebindings
-    * roles
-    * secrets
-    * serviceaccounts (aka 'sa')
-    * services (aka 'svc')
-    * statefulsets
-    * storageclasses
-    `
+	// * all
+	// * certificatesigningrequests (aka 'csr')
+	// * clusterrolebindings
+	// * clusterroles
+	// * clusters (valid only for federation apiservers)
+	// * componentstatuses (aka 'cs')
+	// * configmaps (aka 'cm')
+	// * controllerrevisions
+	// * cronjobs
+	// * customresourcedefinition (aka 'crd')
+	// * daemonsets (aka 'ds')
+	// * deployments (aka 'deploy')
+	// * endpoints (aka 'ep')
+	// * events (aka 'ev')
+	// * horizontalpodautoscalers (aka 'hpa')
+	// * ingresses (aka 'ing')
+	// * jobs
+	// * limitranges (aka 'limits')
+	// * namespaces (aka 'ns')
+	// * networkpolicies (aka 'netpol')
+	// * nodes (aka 'no')
+	// * persistentvolumeclaims (aka 'pvc')
+	// * persistentvolumes (aka 'pv')
+	// * poddisruptionbudgets (aka 'pdb')
+	// * podpreset
+	// * pods (aka 'po')
+	// * podsecuritypolicies (aka 'psp')
+	// * podtemplates
+	// * replicasets (aka 'rs')
+	// * replicationcontrollers (aka 'rc')
+	// * resourcequotas (aka 'quota')
+	// * rolebindings
+	// * roles
+	// * secrets
+	// * serviceaccounts (aka 'sa')
+	// * services (aka 'svc')
+	// * statefulsets
+	// * storageclasses
+	// `
 )
 
 var (
@@ -249,6 +249,8 @@ var (
 		"cluster":   "__kubectl_config_get_clusters",
 		"user":      "__kubectl_config_get_users",
 	}
+
+	validResources = cmdresource.ValidResources()
 )
 
 // NewKubectlCommand creates the `kubectl` command and its nested children.
